@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preference Viewing - INFORMATION TECHNOLOGY DEPARTMENT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+    
+    <!-- Header -->
+    <header class="flex justify-between items-center bg-blue-900 text-white p-4">
+        <div class="flex items-center">
+            <a href="javascript:history.back()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            
+            <img src="New_NITK_Logo-1.png" alt="NITK Logo" class="h-8 mr-2"> <!-- Placeholder for NITK logo -->
+            <div class="text-xl font-bold">INFORMATION TECHNOLOGY DEPARTMENT</div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <!-- Notification Bell Icon -->
+            <div class="relative">
+                <button id="notificationButton" class="focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.437L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                </button>
+                <!-- Notification Dropdown -->
+                <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg overflow-hidden z-20">
+                    <ul class="list-disc list-inside p-4 text-black">
+                        <li>Clash with Student A (Cluster 1)</li>
+                        <li>Clash with Student F (Cluster 2)</li>
+                        <li>Review assigned students by deadline</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Profile and Logout -->
+            <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-full h-10 w-10">
+            <div class="text-md" id="facultyNameDisplay">Faculty Name</div>
+            <button id="logoutButton" class="ml-4 text-white underline">Logout</button>
+        </div>
+    </header>
+
+    <!-- Preferences Viewing -->
+    <section class="flex justify-center items-start h-screen">
+        <div class="bg-white p-10 rounded shadow-lg w-full max-w-3xl">
+            <h1 class="text-3xl font-semibold mb-8">Review Student Preferences</h1>
+
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold">Cluster 1</h2>
+                <div id="cluster1" class="mb-4"></div>
+            </div>
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold">Cluster 2</h2>
+                <div id="cluster2" class="mb-4"></div>
+            </div>
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold">Cluster 3</h2>
+                <div id="cluster3" class="mb-4"></div>
+            </div>
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold">Cluster 4</h2>
+                <div id="cluster4" class="mb-4"></div>
+            </div>
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold">Cluster 5</h2>
+                <div id="cluster5" class="mb-4"></div>
+            </div>
+
+            <h2 class="text-xl font-semibold">Selected Students</h2>
+            <ul id="selectedStudentsList" class="mb-4"></ul>
+            <div id="notification" class="text-red-500"></div>
+            <div id="countdown" class="font-bold text-xl"></div>
+            <h2 class="text-xl font-semibold mt-4">Assigned Students</h2>
+            <ul id="assignedStudentsList" class="mb-4"></ul>
+        </div>
+    </section>
+
+    <script>
+          const clusters = {
+            cluster1: [
+                { name: "Student A", roll: "221IT001", cg: 9.5 },
+                { name: "Student B", roll: "221IT002", cg: 9.52 },
+                { name: "Student C", roll: "221IT003", cg: 9.43 },
+                { name: "Student D", roll: "221IT004", cg: 9.3 },
+                { name: "Student E", roll: "221IT005", cg: 9.2 },
+            ],
+            cluster2: [
+                { name: "Student F", roll: "221IT008", cg: 9.0 },
+                { name: "Student G", roll: "221IT090", cg: 8.9 },
+                { name: "Student H", roll: "221IT081", cg: 8.89 },
+                { name: "Student I", roll: "221IT056", cg: 8.85 },
+                { name: "Student J", roll: "221IT065", cg: 8.7 },
+            ],
+            cluster3: [
+                { name: "Student K", roll: "221IT044", cg: 8.1 },
+                { name: "Student L", roll: "221IT045", cg: 7.9 },
+                { name: "Student M", roll: "221IT043", cg: 7.89 },
+                { name: "Student N", roll: "221IT041", cg: 7.5 },
+                { name: "Student O", roll: "221IT031", cg: 7.7 },
+            ],
+            cluster4: [
+                { name: "Student P", roll: "221IT087", cg: 7.6 },
+                { name: "Student Q", roll: "221IT078", cg: 6.2 },
+                { name: "Student R", roll: "221IT076", cg: 5.6 },
+                { name: "Student S", roll: "221IT088", cg: 5.4 },
+                { name: "Student T", roll: "221IT089", cg: 5.9 },
+            ],
+             };
+
+        const selectedStudents = {}; // Track selected students by cluster
+        const selectedStudentsList = document.getElementById('selectedStudentsList');
+        const countdownElement = document.getElementById('countdown');
+        const notificationElement = document.getElementById('notification');
+        const assignedStudentsList = document.getElementById('assignedStudentsList');
+
+        // Load clusters dynamically
+        Object.entries(clusters).forEach(([key, students]) => {
+            const clusterDiv = document.getElementById(key);
+            if (students.length > 0) {
+                const table = document.createElement('table');
+                table.className = "min-w-full bg-white border border-gray-300";
+                const tbody = document.createElement('tbody');
+
+                students.forEach(student => {
+                    const row = document.createElement('tr');
+                    row.className = "hover:bg-gray-100 cursor-pointer";
+                    row.innerHTML = `
+                        <td class="border border-gray-300 p-2">${student.name}</td>
+                        <td class="border border-gray-300 p-2">${student.roll}</td>
+                        <td class="border border-gray-300 p-2">${student.cg}</td>
+                        <td class="border border-gray-300 p-2">
+                            <button class="bg-blue-500 text-white py-1 px-2 rounded select-student" data-cluster="${key}" data-name="${student.name}">Select</button>
+                        </td>`;
+                    tbody.appendChild(row);
+                });
+                
+                table.appendChild(tbody);
+                clusterDiv.appendChild(table);
+            } else {
+                clusterDiv.innerText = "No Clash";
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('select-student')) {
+                const studentName = e.target.getAttribute('data-name');
+                const clusterName = e.target.getAttribute('data-cluster');
+
+                if (selectedStudents[clusterName]) {
+                    notificationElement.innerText = `Only one student can be selected from ${clusterName}!`;
+                    return;
+                }
+
+                const now = new Date();
+                if (now > deadline) {
+                    notificationElement.innerText = "The deadline has passed. You cannot select students.";
+                    return;
+                }
+
+                selectedStudents[clusterName] = studentName;
+                updateSelectedList();
+            }
+        });
+
+        function updateSelectedList() {
+            selectedStudentsList.innerHTML = '';
+            Object.entries(selectedStudents).forEach(([cluster, student]) => {
+                const li = document.createElement('li');
+                li.innerText = `${student} from ${cluster}`;
+                const removeButton = document.createElement('button');
+                removeButton.innerText = 'Remove';
+                removeButton.className = "text-red-500 ml-2 cursor-pointer";
+                removeButton.onclick = () => {
+                    delete selectedStudents[cluster];
+                    updateSelectedList();
+                };
+                li.appendChild(removeButton);
+                selectedStudentsList.appendChild(li);
+            });
+        }
+
+        // Set deadline 
+        const deadline = new Date('2024-10-27T23:48:00');
+
+        const countdown = setInterval(() => {
+            const now = new Date();
+            const timeRemaining = deadline - now;
+            if (timeRemaining <= 0) {
+                clearInterval(countdown);
+                assignStudents(); // Assign students when time is up
+                notificationElement.innerText = "The deadline has passed. Students have been assigned.";
+                alert("The deadline has passed. You can no longer select students.");
+                return;
+            }
+            countdownElement.innerText = formatTime(timeRemaining);
+        }, 1000);
+
+        function formatTime(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            return `${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        function assignStudents() {
+            assignedStudentsList.innerHTML = '';
+            for (const [cluster, studentName] of Object.entries(selectedStudents)) {
+                const li = document.createElement('li');
+                li.innerText = `${studentName} has been assigned from ${cluster}.`;
+                assignedStudentsList.appendChild(li);
+            }
+            for (const [key, students] of Object.entries(clusters)) {
+                const highestCGStudent = students.reduce((prev, curr) => (prev.cg > curr.cg) ? prev : curr);
+                if (!selectedStudents[key]) {
+                    const li = document.createElement('li');
+                    li.innerText = `${highestCGStudent.name} has been automatically assigned from ${key}.`;
+                    assignedStudentsList.appendChild(li);
+                }
+            }
+        }
+
+        // Toggle notification dropdown
+        document.getElementById('notificationButton').addEventListener('click', (event) => {
+            const dropdown = document.getElementById('notificationDropdown');
+            dropdown.classList.toggle('hidden');
+            event.stopPropagation();
+        });
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('notificationDropdown');
+            if (!document.getElementById('notificationButton').contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Display faculty name from localStorage
+        const facultyName = localStorage.getItem('facultyName');
+        document.getElementById('facultyNameDisplay').innerText = facultyName || "Faculty Name";
+    </script>
+</body>
+</html>

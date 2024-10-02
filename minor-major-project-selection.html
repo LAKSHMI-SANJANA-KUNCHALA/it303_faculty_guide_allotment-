@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minor or Major Project Selection - INFORMATION TECHNOLOGY DEPARTMENT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+    
+    <!-- Header -->
+    <header class="flex justify-between items-center bg-blue-900 text-white p-4">
+        <div class="flex items-center space-x-3">
+            <!-- Back Icon -->
+            <a href="javascript:history.back()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <!-- NITK Logo -->
+            <img src="New_NITK_Logo-1.png" alt="NITK Logo" class="h-10 w-10">
+            <div class="text-xl font-bold">INFORMATION TECHNOLOGY DEPARTMENT</div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <!-- Notification Bell Icon -->
+            <div class="relative">
+                <button id="notificationButton" class="focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.437L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                </button>
+                <!-- Notification Dropdown -->
+                <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg overflow-hidden z-20">
+                    <ul class="list-disc list-inside p-4 text-black">
+                        <li>Clash with Student A (Cluster 1)</li>
+                        <li>Clash with Student F (Cluster 2)</li>
+                        <li>Review assigned students by deadline</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Profile and Logout -->
+            <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-full h-10 w-10">
+            <div class="text-md" id="facultyName">Faculty Name</div>
+            <button id="logoutButton" class="ml-4 text-white underline">Logout</button>
+        </div>
+    </header>
+
+    <!-- Project Selection -->
+    <section class="flex justify-center items-center h-screen">
+        <div class="text-center bg-white p-10 rounded shadow-lg">
+            <h1 class="text-3xl font-semibold mb-8">Select Minor or Major Project</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <a href="preference-viewing.html" class="bg-blue-900 hover:bg-blue-800 text-white py-4 px-6 rounded text-xl shadow-lg">
+                    Minor Project
+                </a>
+                <a href="preference-viewing.html" class="bg-green-900 hover:bg-green-800 text-white py-4 px-6 rounded text-xl shadow-lg">
+                    Major Project
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const facultyName = localStorage.getItem('facultyName') || 'Faculty Name';
+            document.getElementById('facultyName').innerText = facultyName;
+
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                localStorage.clear();
+                window.location.href = 'login.html';
+            });
+
+            // Notification Bell Dropdown
+            const notificationButton = document.getElementById('notificationButton');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+
+            notificationButton.addEventListener('click', function() {
+                notificationDropdown.classList.toggle('hidden');
+            });
+
+            // Close dropdown if clicked outside
+            window.addEventListener('click', function(e) {
+                if (!notificationButton.contains(e.target)) {
+                    notificationDropdown.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - INFORMATION TECHNOLOGY DEPARTMENT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+    
+    <!-- Header -->
+    <header class="flex justify-between items-center bg-blue-900 text-white p-4">
+        <div class="flex items-center space-x-3">
+            <!-- NITK Logo -->
+            <img src="New_NITK_Logo-1.png" alt="NITK Logo" class="h-10 w-10">
+            <div class="text-xl font-bold">INFORMATION TECHNOLOGY DEPARTMENT</div>
+        </div>
+    </header>
+    <!-- Login Form -->
+    <section class="flex justify-center items-center h-screen">
+        <div class="bg-white p-10 rounded shadow-lg w-full max-w-sm">
+            <h1 class="text-3xl font-bold text-center mb-6">Login</h1>
+            <form id="loginForm">
+                <input type="text" id="facultyNameInput" placeholder="Faculty Name" class="mb-4 p-3 bg-gray-100 rounded w-full border border-gray-300" required><br>
+                <input type="password" placeholder="Password" class="mb-6 p-3 bg-gray-100 rounded w-full border border-gray-300" required><br>
+                <button type="submit" class="bg-blue-900 hover:bg-blue-800 text-white py-3 w-full rounded">Login</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const facultyName = document.getElementById('facultyNameInput').value;
+            localStorage.setItem('facultyName', facultyName);
+            window.location.href = "course-selection.html";
+        });
+    </script>
+</body>
+</html>
